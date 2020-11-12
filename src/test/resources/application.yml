@@ -1,16 +1,18 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/jpashop;MVCC=TRUE
+    #메모리 디비에서 테스트 혹은 실행 한다.
+    url: jdbc:h2:mem:test
     username: sa
     password:
     driver-class-name: org.h2.Driver
 
   jpa:
     hibernate:
-      ddl-auto: create
+      #테스트는 드랍까지 시켜주는게 깔끔하다
+      ddl-auto: create-drop
     properties:
       hibernate:
-      # show_sql: true #띄어쓰기 8칸
+      # show_sql: true
         format_sql: true
 logging:
     level:
