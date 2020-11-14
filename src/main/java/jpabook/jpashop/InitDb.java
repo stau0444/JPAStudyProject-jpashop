@@ -29,6 +29,7 @@ public class InitDb {
    @PostConstruct
     public void init(){
         initService.dbInit1();
+        initService.dbInit2();
        System.out.println("----------------샘플데이터 추가됨-----------------");
     }
 
@@ -40,67 +41,90 @@ public class InitDb {
         private  final EntityManager em;
 
         public void dbInit1(){
-            Member member = new Member();
-            member.setName("userA");
-            member.setAddress(new Address("서울","1","111"));
+            Member member = createMember("userA", "서울", "1", "111");
             em.persist(member);
 
-            Member member2 = new Member();
-            member2.setName("userB");
-            member2.setAddress(new Address("서울","1","111"));
-            em.persist(member2);
-
-            Book book1 = new Book();
-            book1.setName("JPA1 BOOK");
-            book1.setPrice(10000);
-            book1.setStockQuantity(100);
+            Book book1 = createBook("JPA1 BOOK",10000, 100);
             em.persist(book1);
 
-            Book book2 = new Book();
-            book2.setName("JPA2 BOOK");
-            book2.setPrice(20000);
-            book2.setStockQuantity(100);
+            Book book2 = createBook("JPA2 BOOK", 20000 , 100);
             em.persist(book2);
 
-            Book book3 = new Book();
-            book3.setName("JPA3 BOOK");
-            book3.setPrice(30000);
-            book3.setStockQuantity(100);
+            Book book3 = createBook("JPA3 BOOK", 30000 , 100);
             em.persist(book3);
 
-            Book book4 = new Book();
-            book4.setName("JPA4 BOOK");
-            book4.setPrice(30000);
-            book4.setStockQuantity(100);
+            Book book4 = createBook("JPA4 BOOK", 30000 , 100);
             em.persist(book4);
 
-            Book book5 = new Book();
-            book5.setName("JPA5 BOOK");
-            book5.setPrice(30000);
-            book5.setStockQuantity(100);
+            Book book5 = createBook("JPA5 BOOK", 30000 , 100);
             em.persist(book5);
 
             OrderItem orderItem1 = OrderItem.createOrderItem(book1, 10000, 1);
             OrderItem orderItem2 = OrderItem.createOrderItem(book2, 20000, 2);
             OrderItem orderItem3 = OrderItem.createOrderItem(book3, 30000, 3);
-            OrderItem orderItem4 = OrderItem.createOrderItem(book4, 40000, 4);
-            OrderItem orderItem9 = OrderItem.createOrderItem(book5, 40000, 4);
+            OrderItem orderItem4 = OrderItem.createOrderItem(book4, 30000, 4);
+            OrderItem orderItem5 = OrderItem.createOrderItem(book5, 30000, 5);
 
-            OrderItem orderItem5 = OrderItem.createOrderItem(book1, 10000, 1);
-            OrderItem orderItem6 = OrderItem.createOrderItem(book2, 20000, 2);
-            OrderItem orderItem7 = OrderItem.createOrderItem(book3, 30000, 3);
-            OrderItem orderItem8 = OrderItem.createOrderItem(book4, 40000, 4);
+            Delivery delivery = createDelivery(member);
 
+            Order order = Order.createOrder(member, delivery, orderItem1, orderItem2, orderItem3, orderItem4,orderItem5);
 
-            Delivery delivery = new Delivery();
-            delivery.setAddress(member.getAddress());
-            Delivery delivery2 = new Delivery();
-            delivery.setAddress(member2.getAddress());
-            Order order = Order.createOrder(member, delivery, orderItem1, orderItem2, orderItem3, orderItem4,orderItem9);
-            Order order2 = Order.createOrder(member2, delivery2, orderItem5, orderItem6, orderItem7, orderItem8);
             em.persist(order);
-            em.persist(order2);
+
         }
+
+        public void dbInit2() {
+            Member member = createMember("userB", "진주", "2", "222");
+            em.persist(member);
+
+            Book book1 = createBook("spring1 BOOK", 20000 , 100);
+            em.persist(book1);
+
+            Book book2 = createBook("spring2 BOOK", 40000 , 200);
+            em.persist(book2);
+
+            Book book3 = createBook("spring3 BOOK", 50000 , 300);
+            em.persist(book3);
+
+            Book book4 = createBook("spring4 BOOK", 60000 , 400);
+            em.persist(book4);
+
+            Book book5 = createBook("spring5 BOOK", 50000 , 100);
+            em.persist(book5);
+
+            OrderItem orderItem1 = OrderItem.createOrderItem(book1, 20000, 1);
+            OrderItem orderItem2 = OrderItem.createOrderItem(book2, 40000, 2);
+            OrderItem orderItem3 = OrderItem.createOrderItem(book3, 50000, 3);
+            OrderItem orderItem4 = OrderItem.createOrderItem(book4, 60000, 4);
+            OrderItem orderItem5 = OrderItem.createOrderItem(book5, 50000, 4);
+
+            Delivery delivery = createDelivery(member);
+
+            Order order = Order.createOrder(member, delivery, orderItem1, orderItem2, orderItem3, orderItem4,orderItem5);
+
+            em.persist(order);
+        }
+    }
+
+    private static Delivery createDelivery(Member member) {
+        Delivery delivery = new Delivery();
+        delivery.setAddress(member.getAddress());
+        return delivery;
+    }
+
+    private static Book createBook(String name, int price, int stockQuantity) {
+        Book book1 = new Book();
+        book1.setName(name);
+        book1.setPrice(price);
+        book1.setStockQuantity(stockQuantity);
+        return book1;
+    }
+
+    private static Member createMember(String name, String city, String street, String zipcode) {
+        Member member = new Member();
+        member.setName(name);
+        member.setAddress(new Address(city, street, zipcode));
+        return member;
     }
 }
 

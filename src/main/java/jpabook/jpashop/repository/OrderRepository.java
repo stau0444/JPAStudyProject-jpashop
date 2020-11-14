@@ -60,5 +60,26 @@ public class OrderRepository {
 
         return query.getResultList();
     }
+    // 페치조인 사용하여 리스트를 가져옴
+    // 연관 관계가 맺어진 것들을 패치 조인으로 명시한다.
+    public List<Order> findAllWithMemberDelivery() {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m " +
+                        " join fetch o.delivery d ",Order.class
+        ).getResultList();
+    }
+
+    public List<OrderSimpleQueryDto> findOrderDtos() {
+        return em.createQuery(
+                "select new jpabook.jpashop.repository" +
+                        ".OrderSimpleQueryDto(o.id , m.name, o.orderDate , o.status, d.address)" +
+                        " from Order o " +
+                        " join o.member m" +
+                        " join o.delivery d",OrderSimpleQueryDto.class)
+                .getResultList();
+    }
+
+
     //3.QueryDSL 사용
 }
