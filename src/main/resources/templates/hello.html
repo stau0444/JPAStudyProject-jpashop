@@ -5,6 +5,9 @@
     <title>Title</title>
 </head>
 <body>
-<p th:text="안녕+${data}+'111'" >안녕하세요 손님</p>
+<form method="post" action="/test">
+    <input type="text" value="requestBody테스트" name="name">
+    <button type="submit">전송</button>
+</form>
 </body>
 </html>
